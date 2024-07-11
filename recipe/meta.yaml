@@ -50,7 +50,7 @@ requirements:
     - libtool     # [unix]
     - patch       # [unix]
     - gnuconfig   # [unix]
-    - python 3.9  # [win]
+    - python 3.10  # [win]
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
