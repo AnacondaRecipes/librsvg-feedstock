@@ -63,7 +63,7 @@ requirements:
     - {{ cdt('libxext') }}               # [linux]
     - {{ cdt('libxrender-devel') }}      # [linux]
   host:
-    - gobject-introspection 1.*
+    - gobject-introspection 1.72
     - glib {{ glib }}
     - gettext   # [osx]
     - harfbuzz 4.3.0
