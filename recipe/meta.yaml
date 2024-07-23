@@ -50,7 +50,7 @@ requirements:
     - libtool     # [unix]
     - patch       # [unix]
     - gnuconfig   # [unix]
-    - python      # [win]
+    - python 3.9  # [win]
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
@@ -63,7 +63,7 @@ requirements:
     - {{ cdt('libxext') }}               # [linux]
     - {{ cdt('libxrender-devel') }}      # [linux]
   host:
-    - gobject-introspection
+    - gobject-introspection 1.*
     - glib {{ glib }}
     - gettext 0.21.0 # [osx]
     - harfbuzz 4.3.0
