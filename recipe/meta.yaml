@@ -39,8 +39,8 @@ requirements:
     - gi-docgen
     - binutils    # [linux]
     - gobject-introspection
-    - rust_win-64 1.76.0       # [win]
-    - rust        1.76.0       # [win]
+    - rust_win-64 1.64.0       # [win]
+    - rust        1.64.0       # [win]
     - {{ compiler('rust') }}   # [not win]
     - {{ compiler('c') }}
     - autoconf    # [unix]
