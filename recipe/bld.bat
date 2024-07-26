@@ -36,21 +36,17 @@ IF NOT EXIST "%LIBRARY_PREFIX%\lib\png16.lib" (
 :: (add libiconv for linking against because glib needs its symbols)
 :: (abuse LIBINTL_LIB to add libs that are needed for linking RSVG tools)
 :: (override BINDIR to ensure the gobject-introspection tools are found)
-:: (introspection disabled: enable by setting INTROSPECTION=1 )
-set LIBRSVG_OPTIONS=^
+set ^"LIBRSVG_OPTIONS=^
   CFG=release ^
   PREFIX="%LIBRARY_PREFIX%" ^
   BINDIR="%BUILD_PREFIX%\Library\bin" ^
-  LIBDIR="%LIBRARY_PREFIX%\lib" ^
   INTROSPECTION=1 ^
   RUSTUP=echo ^
-  PYTHON="%BUILD_PREFIX%\python.exe" ^
-  TOOLCHAIN_TYPE=stable ^
-  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib bcrypt.lib ws2_32.lib userenv.lib ntdll.lib" ^
-  CARGO_CMD="cargo --locked build --release $(MANIFEST_PATH_FLAG) $(CARGO_TARGET_DIR_FLAG)"
+  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib bcrypt.lib" ^
+ ^"
 
-@REM set Python3_EXECUTABLE=%BUILD_PREFIX%\python
-@REM set Python3_ROOT_DIR="%BUILD_PREFIX%\Library"
+set Python3_EXECUTABLE=%BUILD_PREFIX%\python
+set Python3_ROOT_DIR="%BUILD_PREFIX%\Library"
 
 :: configure files
 :: (use cmake just because it's convenient for replacing @VAR@ in files
