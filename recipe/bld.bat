@@ -44,7 +44,10 @@ set LIBRSVG_OPTIONS=^
   LIBDIR="%LIBRARY_PREFIX%\lib" ^
   INTROSPECTION=1 ^
   RUSTUP=echo ^
-  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib"
+  PYTHON="%BUILD_PREFIX%\python.exe" ^
+  TOOLCHAIN_TYPE=stable ^
+  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib bcrypt.lib ws2_32.lib userenv.lib ntdll.lib" ^
+  CARGO_CMD="cargo --locked build --release $(MANIFEST_PATH_FLAG) $(CARGO_TARGET_DIR_FLAG)"
 
 set Python3_EXECUTABLE=%BUILD_PREFIX%\python
 set Python3_ROOT_DIR="%BUILD_PREFIX%\Library"
