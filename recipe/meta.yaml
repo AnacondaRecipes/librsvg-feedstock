@@ -66,17 +66,16 @@ requirements:
     - gobject-introspection 1.*
     - glib {{ glib }}
     - gettext 0.21.0 # [osx]
-    - harfbuzz 4.3.0
-    - fontconfig 2.14
-    - freetype
+    - harfbuzz {{ harfbuzz }}
+    - fontconfig {{ fontconfig }}
+    - freetype {{ freetype }}
     - libiconv  # [win and osx]
     - libxml2 {{ libxml2 }}
-    - cairo 1.16
+    - cairo {{ cairo }}
     - gdk-pixbuf 2.42.10
     - pango
-    - libpng 1.6
+    - libpng {{ libpng }}
     - libzip 1.8.0
-    - freetype 2.10
     - libdeflate 1.17
     - zlib
   run:
