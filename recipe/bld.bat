@@ -44,7 +44,7 @@ set ^"LIBRSVG_OPTIONS=^
   LIBDIR="%LIBRARY_PREFIX%\lib" ^
   INTROSPECTION=1 ^
   RUSTUP=echo ^
-  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib" ^
+  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib bcrypt.lib" ^
  ^"
 
 set Python3_EXECUTABLE=%BUILD_PREFIX%\python

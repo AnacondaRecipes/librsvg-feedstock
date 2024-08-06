@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 3
+  number: 4
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -64,19 +64,18 @@ requirements:
     - {{ cdt('libxrender-devel') }}      # [linux]
   host:
     - gobject-introspection 1.*
-    - glib 2.*
-    - gettext   # [osx]
-    - harfbuzz 4.3.0
-    - fontconfig 2.14
-    - freetype
+    - glib {{ glib }}
+    - gettext 0.21.0 # [osx]
+    - harfbuzz {{ harfbuzz }}
+    - fontconfig {{ fontconfig }}
+    - freetype {{ freetype }}
     - libiconv  # [win and osx]
-    - libxml2 2.10
-    - cairo 1.16
+    - libxml2 {{ libxml2 }}
+    - cairo {{ cairo }}
     - gdk-pixbuf 2.42.10
     - pango
-    - libpng 1.6
+    - libpng {{ libpng }}
     - libzip 1.8.0
-    - freetype 2.10
     - libdeflate 1.17
     - zlib
   run:
