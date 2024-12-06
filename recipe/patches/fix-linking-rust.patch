@@ -1,0 +1,185 @@
+From 8e9bc4f6c396c5ddd9c26304653b9babd80e627a Mon Sep 17 00:00:00 2001
+From: Chun-wei Fan <fanchunwei@src.gnome.org>
+Date: Wed, 7 Jun 2023 16:56:20 +0800
+Subject: [PATCH] NMake Builds: Fix linking on Rust 1.70.0 or later
+
+Link also to ntdll.lib which became required since Rust 1.70.0 or
+nightly-2023-03-21 [1] (which was sadly not clearly documented as such) when
+linking the resulting rsvg DLL.  So, we extend the batch script that is used to
+formerly query the default Rust toolchain to also check whether it requires
+linking to ntdll.lib by checking against the Rust version.
+
+[1]: https://github.com/rust-lang/rust/pull/108262
+
+Fixes issue #968.
+---
+ win32/Makefile.am                             |  2 +-
+ win32/build-rules-msvc.mak                    |  3 +-
+ win32/config-msvc.mak.in                      |  7 +++-
+ win32/rsvg-rust.mak                           | 23 ++++++++----
+ ...-default-target.bat => rust-query-cfg.bat} | 36 +++++++++++++++++--
+ 5 files changed, 60 insertions(+), 11 deletions(-)
+ rename win32/{rust-default-target.bat => rust-query-cfg.bat} (50%)
+
+diff --git a/win32/Makefile.am b/win32/Makefile.am
+index 7260300ba..2176758d1 100644
+--- a/win32/Makefile.am
++++ b/win32/Makefile.am
+@@ -15,7 +15,7 @@ EXTRA_DIST = \
+ 	Makefile.vc		\
+ 	MSVC-Builds.md		\
+ 	rsvg-rust.mak		\
+-	rust-default-target.bat	\
++	rust-query-cfg.bat	\
+ 	pc_base.py		\
+ 	replace.py		\
+ 	rsvgpc.py
+diff --git a/win32/build-rules-msvc.mak b/win32/build-rules-msvc.mak
+index 910e385e4..328c66725 100644
+--- a/win32/build-rules-msvc.mak
++++ b/win32/build-rules-msvc.mak
+@@ -42,8 +42,9 @@ $(LIBRSVG_LIB): $(LIBRSVG_DLL)
+ # $(dependent_objects)
+ # <<
+ # 	@-if exist $@.manifest mt /manifest $@.manifest /outputresource:$@;2
++
+ $(LIBRSVG_DLL): $(RSVG_INTERNAL_LIB) $(librsvg_OBJS) $(LIBRSVG_DEF)
+-	link /DLL $(LDFLAGS) $(LIBRSVG_DEP_LIBS)	\
++	link /DLL $(LDFLAGS) $(LIBRSVG_DEP_LIBS) $(LIBRSVG_SYSTEM_DEP_LIBS)	\
+ 	/implib:$(LIBRSVG_LIB)	\
+ 	-out:$@ /def:$(LIBRSVG_DEF) @<<
+ $(librsvg_OBJS)
+diff --git a/win32/config-msvc.mak.in b/win32/config-msvc.mak.in
+index 314a152fa..034e8b8de 100644
+--- a/win32/config-msvc.mak.in
++++ b/win32/config-msvc.mak.in
+@@ -117,12 +117,17 @@ LIBRSVG_DEP_LIBS =			\
+ 	pango-1.0.lib			\
+ 	cairo-gobject.lib		\
+ 	$(BASE_DEP_LIBS)		\
+-	libxml2.lib			\
+ 	advapi32.lib			\
+ 	userenv.lib			\
+ 	bcrypt.lib			\
+ 	ws2_32.lib
+ 
++LIBRSVG_SYSTEM_DEP_LIBS =	\
++	advapi32.lib	\
++	userenv.lib	\
++	bcrypt.lib	\
++	ws2_32.lib
++
+ RSVG_PIXBUF_LOADER_CFLAGS =			\
+ 	$(BASE_CFLAGS)				\
+ 	/DGDK_PIXBUF_ENABLE_BACKEND		\
+diff --git a/win32/rsvg-rust.mak b/win32/rsvg-rust.mak
+index fdafd81c0..cff34ff49 100644
+--- a/win32/rsvg-rust.mak
++++ b/win32/rsvg-rust.mak
+@@ -13,12 +13,6 @@ CARGO = %HOMEPATH%\.cargo\bin\cargo
+ RUSTUP = %HOMEPATH%\.cargo\bin\rustup
+ !endif
+ 
+-!if [call rust-default-target.bat $(RUSTUP)]
+-!endif
+-!include rust-cfg.mak
+-!if [del /f/q rust-cfg.mak]
+-!endif
+-
+ # For those who wish to use a particular toolchain version to build librsvg
+ !if defined(TOOLCHAIN_VERSION)
+ TOOLCHAIN_TYPE = $(TOOLCHAIN_VERSION)
+@@ -27,6 +21,18 @@ TOOLCHAIN_TYPE =
+ !endif
+ 
+ !if "$(TOOLCHAIN_TYPE)" == ""
++CHECK_DEFAULT_COMPILER=1
++!if [call rust-query-cfg.bat use-rustup $(RUSTUP)]
++!endif
++!else
++!if [call rust-query-cfg.bat set-toolchain $(RUSTUP) $(TOOLCHAIN_VERSION)]
++!endif
++!endif
++!include rust-cfg.mak
++!if [del /f/q rust-cfg.mak]
++!endif
++
++!ifdef CHECK_DEFAULT_COMPILER
+ !if "$(RUST_DEFAULT_COMPILER)" != "pc-windows-msvc"
+ !error The default Rust toolchain is not an MSVC toolchain. Please use `rustup` to set the default to an MSVC toolchain
+ !endif
+@@ -93,6 +99,11 @@ BUILD_RUST = 0
+ 
+ !if "$(BUILD_RUST)" == "1"
+ 
++# Link to ntdll.lib for Rust 1.70.0+ or nightly-2023-03-21 or later
++!if "$(LIBRSVG_USE_NTDLL)" == "1"
++LIBRSVG_SYSTEM_DEP_LIBS = $(LIBRSVG_SYSTEM_DEP_LIBS) ntdll.lib
++!endif
++
+ CARGO_TARGET = $(RUST_TARGET)-pc-windows-msvc
+ CARGO_TARGET_TOOLCHAIN = +$(TOOLCHAIN_TYPE)-$(CARGO_TARGET)
+ 
+diff --git a/win32/rust-default-target.bat b/win32/rust-query-cfg.bat
+similarity index 50%
+rename from win32/rust-default-target.bat
+rename to win32/rust-query-cfg.bat
+index 2f8107592..9eb5913bf 100644
+--- a/win32/rust-default-target.bat
++++ b/win32/rust-query-cfg.bat
+@@ -1,6 +1,10 @@
+ @echo off
+ :: SETLOCAL ENABLEDELAYEDEXPANSION
+-set RUSTUP=%1
++if not "%1" == "use-rustup" if not "%1" == "set-toolchain" goto :err_badopt
++if "%2" == "" goto :err_badopt
++
++set RUSTUP=%2
++if "%1" == "set-toolchain" goto :parse_toolchain
+ 
+ FOR /F "tokens=* USEBACKQ" %%F IN (`%RUSTUP% default`) DO (
+ SET RUST_DEFAULT_TOOLCHAIN=%%F
+@@ -10,7 +14,7 @@ SET RUST_DEFAULT_TOOLCHAIN=%%F
+ :: Rust toolchain for the build, we are indeed using an msvc
+ :: one!
+ 
+-FOR /F "tokens=1,2,3,4,5*  delims=-" %%a IN ("%RUST_DEFAULT_TOOLCHAIN%") do (
++FOR /F "tokens=1,2,3,4,5* delims=-" %%a IN ("%RUST_DEFAULT_TOOLCHAIN%") do (
+ :: <version>-<platform>-pc-windows-msvc (default) or  stable-<platform>-pc-windows-msvc (default)
+ if not "%%a" == "nightly" set CHANNEL=%%a
+ if not "%%a" == "nightly" set TARGET=%%b
+@@ -34,3 +38,31 @@ if exist rust-cfg.mak goto :EOF
+ echo RUST_DEFAULT_CHANNEL=%CHANNEL%>>rust-cfg.mak
+ echo RUST_DEFAULT_TARGET=%NMAKE_TGT%>>rust-cfg.mak
+ echo RUST_DEFAULT_COMPILER=%TOOLCHAIN_COMPILER%>>rust-cfg.mak
++goto :check_link_ntdll
++
++:parse_toolchain
++if "%3" == "" goto :err_badopt
++set CHANNEL=%3
++
++:check_link_ntdll
++FOR /F "tokens=1* delims=-" %%a IN ("%CHANNEL%") do (
++set CHANNEL_TYPE=%%a
++set NIGHTLY_DATE=%%b
++)
++
++if "%CHANNEL_TYPE%" == "stable" FOR /F "tokens=1,2* delims= " %%o in ('%RUSTUP:rustup=rustc% --version') do (
++set CHANNEL_TYPE=%%p
++)
++echo LIBRSVG_USE_NTDLL=1 >> rust-cfg.mak
++if not "%CHANNEL_TYPE%" == "nightly" (
++if "%CHANNEL_TYPE%" GEQ "1.70.0" echo LIBRSVG_USE_NTDLL=1 >> rust-cfg.mak
++if "%CHANNEL_TYPE%" LSS "1.70.0" echo LIBRSVG_USE_NTDLL=0 >> rust-cfg.mak
++)
++if "%CHANNEL_TYPE%" == "nightly" (
++if "%NIGHTLY_DATE%" GEQ "2023-03-21" echo LIBRSVG_USE_NTDLL=1 >> rust-cfg.mak
++if "%NIGHTLY_DATE%" LSS "2023-03-21" echo LIBRSVG_USE_NTDLL=0 >> rust-cfg.mak
++)
++goto :EOF
++
++:err_badopt
++echo Usage: %0 [use-rustup^|set-toolchain] rustup-executable] ^<toolchain-version-for-set-toolchain^>
+-- 
+GitLab
+

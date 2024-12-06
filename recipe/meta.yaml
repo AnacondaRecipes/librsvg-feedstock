@@ -13,6 +13,7 @@ source:
   sha256: {{ sha256 }}
   patches:  # [not win]
     - patches/0001_add_rust_lto.patch  # [not win]
+    - patches/fix-linking-rust.patch   # [win]
 
 build:
   skip: true # [win and vc<14]
