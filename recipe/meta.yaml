@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 4
+  number: 5
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -51,6 +51,9 @@ requirements:
     - patch       # [unix]
     - gnuconfig   # [unix]
     - python 3.9  # [win]
+    # used in gobject-introspection. distutils.msvccompiler removed in recent setuptools
+    # # TODO remove when gobject-introspection stop using distutils.msvccompiler from setuptools.
+    - setuptools <74
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
@@ -76,7 +79,7 @@ requirements:
     - pango
     - libpng {{ libpng }}
     - libzip 1.8.0
-    - libdeflate 1.17
+    - libdeflate 1.22
     - zlib
   run:
     - libdeflate
