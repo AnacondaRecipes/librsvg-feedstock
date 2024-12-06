@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 4
+  number: 5
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -39,8 +39,8 @@ requirements:
     - gi-docgen
     - binutils    # [linux]
     - gobject-introspection
-    - rust_win-64 1.64.0       # [win]
-    - rust        1.64.0       # [win]
+    - rust_win-64 1.82.0       # [win]
+    - rust        1.82.0       # [win]
     - {{ compiler('rust') }}   # [not win]
     - {{ compiler('c') }}
     - autoconf    # [unix]
@@ -76,7 +76,7 @@ requirements:
     - pango
     - libpng {{ libpng }}
     - libzip 1.8.0
-    - libdeflate 1.17
+    - libdeflate 1.22
     - zlib
   run:
     - libdeflate
