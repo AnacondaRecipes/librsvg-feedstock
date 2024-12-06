@@ -50,7 +50,7 @@ requirements:
     - libtool     # [unix]
     - patch       # [unix]
     - gnuconfig   # [unix]
-    - python 3.9  # [win]
+    - python 3.10
     # To fix 'ModuleNotFoundError: No module named 'distutils.msvccompiler''
     - setuptools <65
     - pthread-stubs                      # [linux]
