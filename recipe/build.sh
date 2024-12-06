@@ -37,7 +37,6 @@ else
   export XDG_DATA_DIRS=$PREFIX/share:$BUILD_PREFIX/share
 fi
 
-
 configure_args=(
     --disable-Bsymbolic
     --disable-static
