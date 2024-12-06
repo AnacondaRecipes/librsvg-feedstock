@@ -37,8 +37,6 @@ else
   export XDG_DATA_DIRS=$PREFIX/share:$BUILD_PREFIX/share
 fi
 
-# Debug g-ir-scanner output
-g-ir-scanner
 
 configure_args=(
     --disable-Bsymbolic

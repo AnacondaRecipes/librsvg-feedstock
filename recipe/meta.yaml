@@ -50,9 +50,9 @@ requirements:
     - libtool     # [unix]
     - patch       # [unix]
     - gnuconfig   # [unix]
-    - python 3.10
-    # To fix 'ModuleNotFoundError: No module named 'distutils.msvccompiler''
-    - setuptools <65
+    - python
+    # run-dep as a workaround for now; upstream package still imports from distutils
+    - setuptools  # [py>311]
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
