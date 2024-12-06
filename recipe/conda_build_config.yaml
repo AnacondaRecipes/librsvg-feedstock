@@ -1,2 +1,2 @@
-c_compiler:                    # [win]
+c_compiler:
   - vs2022                     # [win]
