@@ -37,6 +37,8 @@ else
   export XDG_DATA_DIRS=$PREFIX/share:$BUILD_PREFIX/share
 fi
 
+# https://github.com/rust-lang/cargo/issues/10583#issuecomment-1129997984
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 configure_args=(
     --disable-Bsymbolic
