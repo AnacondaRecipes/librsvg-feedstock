@@ -11,7 +11,7 @@ package:
 source:
   url: https://download.gnome.org/sources/{{ name }}/{{ version_majmin }}/{{ name }}-{{ version }}.tar.xz
   sha256: {{ sha256 }}
-  patches:
+  patches:  # [not win]
     - patches/0001_add_rust_lto.patch  # [not win]
 
 build:
@@ -49,7 +49,6 @@ requirements:
     - gawk        # [unix]
     - libtool     # [unix]
     - patch       # [unix]
-    #- m2-patch    # [win]
     - gnuconfig   # [unix]
     - python 3.9  # [win]
     - setuptools <74
