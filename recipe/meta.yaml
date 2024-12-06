@@ -50,9 +50,8 @@ requirements:
     - libtool     # [unix]
     - patch       # [unix]
     - gnuconfig   # [unix]
-    - python 3.9
-    # run-dep as a workaround for now; upstream package still imports from distutils
-    - setuptools  # [py>311]
+    - python 3.9  # [win]
+    - setuptools <74
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
@@ -66,8 +65,6 @@ requirements:
     - {{ cdt('libxrender-devel') }}      # [linux]
   host:
     - gobject-introspection 1.*
-    # run-dep as a workaround for now; upstream package still imports from distutils
-    - setuptools  # [py>311]
     - glib {{ glib }}
     - gettext 0.21.0 # [osx]
     - harfbuzz {{ harfbuzz }}
