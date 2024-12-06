@@ -13,7 +13,7 @@ source:
   sha256: {{ sha256 }}
   patches:
     - patches/0001_add_rust_lto.patch  # [not win]
-    - patches/fix-linking-rust.patch   # [win]
+    - patches/fix-rust.patch   # [win]
 
 build:
   skip: true # [win and vc<14]
@@ -50,6 +50,7 @@ requirements:
     - gawk        # [unix]
     - libtool     # [unix]
     - patch       # [unix]
+    - m2-patch    # [win]
     - gnuconfig   # [unix]
     - python 3.9  # [win]
     - setuptools <74
