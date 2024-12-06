@@ -51,6 +51,8 @@ requirements:
     - patch       # [unix]
     - gnuconfig   # [unix]
     - python 3.9  # [win]
+    # To fix 'ModuleNotFoundError: No module named 'distutils.msvccompiler''
+    - setuptools <65
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
@@ -64,8 +66,6 @@ requirements:
     - {{ cdt('libxrender-devel') }}      # [linux]
   host:
     - gobject-introspection 1.*
-    # To fix 'ModuleNotFoundError: No module named 'distutils.msvccompiler''
-    - setuptools <65
     - glib {{ glib }}
     - gettext 0.21.0 # [osx]
     - harfbuzz {{ harfbuzz }}
