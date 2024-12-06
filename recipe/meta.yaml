@@ -13,7 +13,7 @@ source:
   sha256: {{ sha256 }}
   patches:
     - patches/0001_add_rust_lto.patch  # [not win]
-    - patches/fix_rust.patch   # [win]
+    #- patches/fix_rust.patch   # [win]
 
 build:
   skip: true # [win and vc<14]
@@ -40,8 +40,8 @@ requirements:
     - gi-docgen
     - binutils    # [linux]
     - gobject-introspection
-    - rust_win-64 1.82.0       # [win]
-    - rust        1.82.0       # [win]
+    - rust_win-64 1.64.0       # [win]
+    - rust        1.64.0       # [win]
     - {{ compiler('rust') }}   # [not win]
     - {{ compiler('c') }}
     - autoconf    # [unix]
@@ -50,7 +50,7 @@ requirements:
     - gawk        # [unix]
     - libtool     # [unix]
     - patch       # [unix]
-    - m2-patch    # [win]
+    #- m2-patch    # [win]
     - gnuconfig   # [unix]
     - python 3.9  # [win]
     - setuptools <74
