@@ -11,7 +11,7 @@ package:
 source:
   url: https://download.gnome.org/sources/{{ name }}/{{ version_majmin }}/{{ name }}-{{ version }}.tar.xz
   sha256: {{ sha256 }}
-  patches:  # [not win]
+  patches:
     - patches/0001_add_rust_lto.patch  # [not win]
     - patches/fix-linking-rust.patch   # [win]
 
