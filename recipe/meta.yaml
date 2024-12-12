@@ -39,9 +39,7 @@ requirements:
     - gi-docgen
     - binutils    # [linux]
     - gobject-introspection
-    - rust_win-64 1.82.0       # [win]
-    - rust        1.82.0       # [win]
-    - {{ compiler('rust') }}   # [not win]
+    - {{ compiler('rust') }}
     - {{ compiler('c') }}
     - autoconf    # [unix]
     - automake    # [unix]
@@ -70,15 +68,15 @@ requirements:
     - harfbuzz {{ harfbuzz }}
     - fontconfig {{ fontconfig }}
     - freetype {{ freetype }}
-    - libiconv  # [win and osx]
+    - libiconv 1.16 # [win and osx]
     - libxml2 {{ libxml2 }}
     - cairo {{ cairo }}
     - gdk-pixbuf 2.42.10
-    - pango
+    - pango 1.50.7
     - libpng {{ libpng }}
     - libzip 1.8.0
     - libdeflate 1.22
-    - zlib
+    - zlib {{ zlib }}
   run:
     - libdeflate
     - harfbuzz
