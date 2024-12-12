@@ -81,7 +81,8 @@ requirements:
     - libdeflate
     - harfbuzz
     - fontconfig
-    - libiconv  # [win or osx]
+    # libiconv run_exports is not applied without pin_compatible
+    - {{ pin_compatible('libiconv') }}  # [win or osx]
     - libxml2
     - cairo
     - gdk-pixbuf
