@@ -68,7 +68,6 @@ requirements:
     - harfbuzz {{ harfbuzz }}      # [not win]
     - fontconfig {{ fontconfig }}  # [not win]
     - freetype {{ freetype }}      # [not win]
-    - libiconv 1.16                # [osx]
     - libxml2 {{ libxml2 }}
     - cairo {{ cairo }}
     - gdk-pixbuf 2.42.10
