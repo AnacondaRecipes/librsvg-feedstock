@@ -75,10 +75,7 @@ requirements:
     - pango 1.50.7
     - libpng {{ libpng }}
     - libzip 1.8.0
-    - libdeflate 1.22
-    - zlib {{ zlib }}
   run:
-    - libdeflate
     - harfbuzz
     - fontconfig
     # libiconv run_exports is not applied without pin_compatible
@@ -88,7 +85,6 @@ requirements:
     - gdk-pixbuf
     - pango
     - libpng
-    - zlib
     - freetype
 
 test:
