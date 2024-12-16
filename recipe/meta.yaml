@@ -65,30 +65,30 @@ requirements:
     - gobject-introspection 1.*
     - glib {{ glib }}
     - gettext 0.21.0 # [osx]
-    - harfbuzz {{ harfbuzz }}
-    - fontconfig {{ fontconfig }}
-    - freetype {{ freetype }}
-    - libiconv 1.16 # [win and osx]
+    - harfbuzz {{ harfbuzz }}      # [not win]
+    - fontconfig {{ fontconfig }}  # [not win]
+    - freetype {{ freetype }}      # [not win]
+    - libiconv 1.16                # [osx]
     - libxml2 {{ libxml2 }}
     - cairo {{ cairo }}
     - gdk-pixbuf 2.42.10
     - pango 1.50.7
-    - libpng {{ libpng }}
+    - libpng {{ libpng }}          # [not win]
     - libzip 1.8.0
-    # lib/libz.1.dylib required on osx
-    - zlib {{ zlib }}  # [osx]
+    # lib/libz.1.dylib required by bin/rsvg-convert on osx
+    - zlib {{ zlib }}              # [osx]
   run:
-    - harfbuzz
-    - fontconfig
+    - harfbuzz  # [not win]
+    - fontconfig  # [not win]
     # libiconv run_exports is not applied without pin_compatible
-    - {{ pin_compatible('libiconv') }}  # [win or osx]
+    - {{ pin_compatible('libiconv') }}  # [osx]
     - libxml2
     - cairo
     - gdk-pixbuf
     - pango
-    - libpng
-    - freetype
-    - zlib
+    - libpng    # [not win]
+    - freetype  # [not win]
+    - zlib      # [osx]
 
 test:
   requires:
