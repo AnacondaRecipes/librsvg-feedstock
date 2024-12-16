@@ -75,6 +75,8 @@ requirements:
     - pango 1.50.7
     - libpng {{ libpng }}
     - libzip 1.8.0
+    # lib/libz.1.dylib required on osx
+    - zlib {{ zlib }}  # [osx]
   run:
     - harfbuzz
     - fontconfig
@@ -86,6 +88,7 @@ requirements:
     - pango
     - libpng
     - freetype
+    - zlib
 
 test:
   requires:
