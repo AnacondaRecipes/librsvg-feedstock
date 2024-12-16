@@ -77,17 +77,15 @@ requirements:
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
     - zlib {{ zlib }}              # [osx]
   run:
-    - harfbuzz  # [not win]
+    - harfbuzz    # [not win]
     - fontconfig  # [not win]
-    # libiconv run_exports is not applied without pin_compatible
-    - {{ pin_compatible('libiconv') }}  # [osx]
     - libxml2
     - cairo
     - gdk-pixbuf
     - pango
-    - libpng    # [not win]
-    - freetype  # [not win]
-    - zlib      # [osx]
+    - libpng      # [not win]
+    - freetype    # [not win]
+    - zlib        # [osx]
 
 test:
   requires:
