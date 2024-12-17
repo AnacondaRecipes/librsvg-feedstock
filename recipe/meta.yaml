@@ -1,8 +1,8 @@
 {% set name = "librsvg" %}
-{% set version = "2.54.4" %}
+{% set version = "2.56.3" %}
 {% set abi_version = "2.0" %}
 {% set version_majmin = version.rsplit('.', 1)[0] %}
-{% set sha256 = "ea152a243f6a43c0e036a28c70de3fcbcdea5664c6811c78592bc229ecc24833" %}
+{% set sha256 = "5a328048a02d014645cd27f61140f4e0b11280fb2c7f2a21864fe0c59ac1ce88" %}
 
 package:
   name: {{ name }}
@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 4
+  number: 0
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -39,9 +39,7 @@ requirements:
     - gi-docgen
     - binutils    # [linux]
     - gobject-introspection
-    - rust_win-64 1.64.0       # [win]
-    - rust        1.64.0       # [win]
-    - {{ compiler('rust') }}   # [not win]
+    - {{ compiler('rust') }}
     - {{ compiler('c') }}
     - autoconf    # [unix]
     - automake    # [unix]
@@ -51,6 +49,7 @@ requirements:
     - patch       # [unix]
     - gnuconfig   # [unix]
     - python 3.9  # [win]
+    - setuptools <74
     - pthread-stubs                      # [linux]
     - {{ cdt('libxau-devel') }}          # [linux]
     - {{ cdt('libxau') }}                # [linux]
@@ -66,30 +65,30 @@ requirements:
     - gobject-introspection 1.*
     - glib {{ glib }}
     - gettext 0.21.0 # [osx]
-    - harfbuzz {{ harfbuzz }}
-    - fontconfig {{ fontconfig }}
-    - freetype {{ freetype }}
-    - libiconv  # [win and osx]
+    - harfbuzz {{ harfbuzz }}      # [not win]
+    - fontconfig {{ fontconfig }}  # [not win]
+    - freetype {{ freetype }}      # [not win]
+    - libiconv 1.16                # [osx]
     - libxml2 {{ libxml2 }}
     - cairo {{ cairo }}
     - gdk-pixbuf 2.42.10
-    - pango
-    - libpng {{ libpng }}
+    - pango 1.50.7
+    - libpng {{ libpng }}          # [not win]
     - libzip 1.8.0
-    - libdeflate 1.17
-    - zlib
+    # lib/libz.1.dylib required by bin/rsvg-convert on osx
+    - zlib {{ zlib }}              # [osx]
   run:
-    - libdeflate
-    - harfbuzz
-    - fontconfig
-    - libiconv  # [win or osx]
+    - harfbuzz    # [not win]
+    - fontconfig  # [not win]
+    # libiconv run_exports is not applied without pin_compatible
+    - {{ pin_compatible('libiconv') }}  # [osx]
     - libxml2
     - cairo
     - gdk-pixbuf
     - pango
-    - libpng
-    - zlib
-    - freetype
+    - libpng      # [not win]
+    - freetype    # [not win]
+    - zlib        # [osx]
 
 test:
   requires:
@@ -101,7 +100,7 @@ test:
     {% set name_abi = name + "-" + abi_version %}
     {% set lib = name + "-" + abi_version.split('.', 1)[0] %}  # [unix]
     {% set lib = "rsvg-" + abi_version %}  # [win]
-    {% set vs_major = dict(vs2015="14", vs2017="15", vs2019="16")[c_compiler] %}  # [win]
+    {% set vs_major = dict(vs2015="14", vs2017="15", vs2019="16", vs2022="17")[c_compiler] %}  # [win]
 
     # verify that libs get installed and can be located through pkg-config
     - test -f $PREFIX/lib/{{ lib }}${SHLIB_EXT}  # [unix]
