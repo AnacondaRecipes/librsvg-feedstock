@@ -129,11 +129,6 @@ test:
     # introspection is disabled for now on windows
     #- if not exist %LIBRARY_LIB%\\girepository-1.0\\Rsvg-2.0.typelib exit 1  # [win]
 
-  # downstreams:
-  #   - adwaita-icon-theme 40.1.1
-  #   - ffmpeg 6.1.1
-  #   - graphviz 2.50.0
-
 about:
   home: https://wiki.gnome.org/Projects/LibRsvg
   license: LGPL-2.1-or-later
