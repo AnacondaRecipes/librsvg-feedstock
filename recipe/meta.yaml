@@ -131,9 +131,9 @@ test:
 
   downstreams:
     - adwaita-icon-theme 40.1.1
-    - ffmpeg 6.1.1
-    - graphviz 2.5.0
-    - graphviz 2.4.8
+    #- ffmpeg 6.1.1
+    - graphviz 2.50.0
+    - graphviz 2.48.0
 
 about:
   home: https://wiki.gnome.org/Projects/LibRsvg
