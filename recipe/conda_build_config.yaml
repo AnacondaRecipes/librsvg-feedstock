@@ -1,2 +1,5 @@
 c_compiler:        # [win]
   - vs2022         # [win]
+
+harfbuzz:
+  - 10
