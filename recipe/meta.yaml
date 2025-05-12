@@ -51,16 +51,12 @@ requirements:
     - python 3.9  # [win]
     - setuptools <74
     - pthread-stubs                      # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('libxau') }}                # [linux]
-    - {{ cdt('xorg-x11-util-macros') }}  # [linux]
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libx11-common') }}         # [linux]
-    - {{ cdt('libx11') }}                # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxext') }}               # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
+    # TODO: map CDT libxau to new X11 package
+    # - { cdt('libxau') }
+    # TODO: map CDT libx11-common to new X11 package
+    # - { cdt('libx11-common') }
+    # TODO: map CDT libx11 to new X11 package
+    # - { cdt('libx11') }
   host:
     - gobject-introspection 1.*
     - glib {{ glib }}
@@ -77,6 +73,13 @@ requirements:
     - libzip 1.8.0
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
     - zlib {{ zlib }}              # [osx]
+    - xorg-libxau
+    - xorg-util-macros
+    - xorg-xproto
+    - xorg-libx11
+    - xorg-libxext
+    - xorg-libxext
+    - xorg-libxrender
   run:
     - harfbuzz    # [not win]
     - fontconfig  # [not win]
