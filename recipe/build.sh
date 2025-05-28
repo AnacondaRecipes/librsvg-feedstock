@@ -1,6 +1,12 @@
 #! /bin/bash
 set -ex
 
+if [[ "$(uname)" == "Darwin" ]]; then
+  # Fix locale issues on macOS for docutils/rst2man
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+fi
+
 # Get an updated config.sub and config.guess
 cp $BUILD_PREFIX/share/gnuconfig/config.* .
 
