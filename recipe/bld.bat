@@ -36,13 +36,13 @@ IF NOT EXIST "%LIBRARY_PREFIX%\lib\png16.lib" (
 :: (add libiconv for linking against because glib needs its symbols)
 :: (abuse LIBINTL_LIB to add libs that are needed for linking RSVG tools)
 :: (override BINDIR to ensure the gobject-introspection tools are found)
-:: (introspection disabled on Windows due to GL-1.0.typelib build failures)
+:: (introspection disabled: enable by setting INTROSPECTION=1 )
 set ^"LIBRSVG_OPTIONS=^
   CFG=release ^
   PREFIX="%LIBRARY_PREFIX%" ^
   BINDIR="%BUILD_PREFIX%\Library\bin" ^
   LIBDIR="%LIBRARY_PREFIX%\lib" ^
-  INTROSPECTION=0 ^
+  INTROSPECTION=1 ^
   RUSTUP=echo ^
   PYTHON="%BUILD_PREFIX%\python.exe" ^
   TOOLCHAIN_TYPE=stable ^
