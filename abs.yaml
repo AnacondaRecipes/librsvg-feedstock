@@ -7,4 +7,4 @@ channels:
   - https://staging.continuum.io/prefect/fs/cairo-feedstock/pr9/41e8d4b
   - https://staging.continuum.io/prefect/fs/harfbuzz-feedstock/pr21/5b22f6e
   - https://staging.continuum.io/prefect/fs/pango-feedstock/pr3/a966d4a
-  - https://staging.continuum.io/prefect/fs/gobject-introspection-feedstock/pr15/3b1b4b4
+  - https://staging.continuum.io/prefect/fs/gobject-introspection-feedstock/pr15/9c7f9c7
