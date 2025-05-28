@@ -2,3 +2,8 @@
 build_parameters:
   - "--suppress-variables"
   - "--error-overlinking"
+
+channels:
+  - https://staging.continuum.io/prefect/fs/cairo-feedstock/pr9/41e8d4b
+  - https://staging.continuum.io/prefect/fs/harfbuzz-feedstock/pr21/5b22f6e
+  - https://staging.continuum.io/prefect/fs/pango-feedstock/pr3/a966d4a

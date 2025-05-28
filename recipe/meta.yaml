@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 1
+  number: 2
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -51,12 +51,6 @@ requirements:
     - python 3.9  # [win]
     - setuptools <74
     - pthread-stubs                      # [linux]
-    # TODO: map CDT libxau to new X11 package
-    # - { cdt('libxau') }
-    # TODO: map CDT libx11-common to new X11 package
-    # - { cdt('libx11-common') }
-    # TODO: map CDT libx11 to new X11 package
-    # - { cdt('libx11') }
   host:
     - gobject-introspection 1.*
     - glib {{ glib }}
@@ -73,13 +67,7 @@ requirements:
     - libzip 1.8.0
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
     - zlib {{ zlib }}              # [osx]
-    - xorg-libxau
-    - xorg-util-macros
-    - xorg-xproto
-    - xorg-libx11
-    - xorg-libxext
-    - xorg-libxext
-    - xorg-libxrender
+    # X11/XCB dependencies go with cairo.
   run:
     - harfbuzz    # [not win]
     - fontconfig  # [not win]
