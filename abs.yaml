@@ -4,7 +4,7 @@ build_parameters:
   - "--error-overlinking"
 
 channels:
-  - https://staging.continuum.io/prefect/fs/cairo-feedstock/pr9/41e8d4b
-  - https://staging.continuum.io/prefect/fs/harfbuzz-feedstock/pr21/5b22f6e
-  - https://staging.continuum.io/prefect/fs/pango-feedstock/pr3/a966d4a
-  - https://staging.continuum.io/prefect/fs/gobject-introspection-feedstock/pr15/9c7f9c7
+  - https://staging.continuum.io/prefect/fs/cairo-feedstock/pr9/9a6abc4
+  - https://staging.continuum.io/prefect/fs/pango-feedstock/pr3/36ad004
+  - https://staging.continuum.io/prefect/fs/harfbuzz-feedstock/pr21/a51b461
+  - https://staging.continuum.io/prefect/fs/gobject-introspection-feedstock/pr15/6c29ca5

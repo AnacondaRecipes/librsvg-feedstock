@@ -32,8 +32,8 @@ build:
 
 requirements:
   build:
-    - cmake  # [win]
-    - make  # [unix]
+    - cmake       # [win]
+    - make        # [unix]
     - pkg-config
     - docutils
     - gi-docgen
@@ -50,24 +50,24 @@ requirements:
     - gnuconfig   # [unix]
     - python 3.9  # [win]
     - setuptools <74
-    - pthread-stubs                      # [linux]
+    - pthread-stubs                # [linux]
   host:
-    - gobject-introspection 1.*
-    - glib {{ glib }}
-    - gettext 0.21.0 # [osx]
-    - harfbuzz {{ harfbuzz }}      # [not win]
+    # X11/XCB dependencies go with cairo.
+    - cairo {{ cairo }}
     - fontconfig {{ fontconfig }}  # [not win]
     - freetype {{ freetype }}      # [not win]
-    - libiconv 1.16                # [osx]
-    - libxml2 {{ libxml2 }}
-    - cairo {{ cairo }}
-    - gdk-pixbuf 2.42.10
-    - pango 1.50.7
+    - gdk-pixbuf {{ gdk_pixbuf }}
+    - gettext {{ gettext }}        # [osx]
+    - glib {{ glib }}
+    - gobject-introspection 1.*
+    - harfbuzz {{ harfbuzz }}      # [not win]
+    - libiconv {{ libiconv }}      # [osx]
     - libpng {{ libpng }}          # [not win]
-    - libzip 1.8.0
+    - libxml2 {{ libxml2 }}
+    - libzip {{ libzip }}
+    - pango {{ pango }}
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
     - zlib {{ zlib }}              # [osx]
-    # X11/XCB dependencies go with cairo.
   run:
     - harfbuzz    # [not win]
     - fontconfig  # [not win]
