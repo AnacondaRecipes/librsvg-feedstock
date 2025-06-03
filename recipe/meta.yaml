@@ -64,7 +64,7 @@ requirements:
     - libiconv {{ libiconv }}      # [osx]
     - libpng {{ libpng }}          # [not win]
     - libxml2 {{ libxml2 }}
-    - libzip {{ libzip }}
+    - libzip 1.8.0
     - pango {{ pango }}
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
     - zlib {{ zlib }}              # [osx]
