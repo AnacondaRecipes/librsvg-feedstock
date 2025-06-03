@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 1
+  number: 2
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -32,8 +32,8 @@ build:
 
 requirements:
   build:
-    - cmake  # [win]
-    - make  # [unix]
+    - cmake       # [win]
+    - make        # [unix]
     - pkg-config
     - docutils
     - gi-docgen
@@ -50,31 +50,22 @@ requirements:
     - gnuconfig   # [unix]
     - python 3.9  # [win]
     - setuptools <74
-    - pthread-stubs                      # [linux]
-    - {{ cdt('libxau-devel') }}          # [linux]
-    - {{ cdt('libxau') }}                # [linux]
-    - {{ cdt('xorg-x11-util-macros') }}  # [linux]
-    - {{ cdt('xorg-x11-proto-devel') }}  # [linux]
-    - {{ cdt('libx11-devel') }}          # [linux]
-    - {{ cdt('libx11-common') }}         # [linux]
-    - {{ cdt('libx11') }}                # [linux]
-    - {{ cdt('libxext-devel') }}         # [linux]
-    - {{ cdt('libxext') }}               # [linux]
-    - {{ cdt('libxrender-devel') }}      # [linux]
+    - pthread-stubs                # [linux]
   host:
-    - gobject-introspection 1.*
-    - glib {{ glib }}
-    - gettext 0.21.0 # [osx]
-    - harfbuzz {{ harfbuzz }}      # [not win]
+    # X11/XCB dependencies go with cairo.
+    - cairo {{ cairo }}
     - fontconfig {{ fontconfig }}  # [not win]
     - freetype {{ freetype }}      # [not win]
-    - libiconv 1.16                # [osx]
-    - libxml2 {{ libxml2 }}
-    - cairo {{ cairo }}
-    - gdk-pixbuf 2.42.10
-    - pango 1.50.7
+    - gdk-pixbuf {{ gdk_pixbuf }}
+    - gettext {{ gettext }}        # [osx]
+    - glib {{ glib }}
+    - gobject-introspection 1.*
+    - harfbuzz {{ harfbuzz }}      # [not win]
+    - libiconv {{ libiconv }}      # [osx]
     - libpng {{ libpng }}          # [not win]
+    - libxml2 {{ libxml2 }}
     - libzip 1.8.0
+    - pango {{ pango }}
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
     - zlib {{ zlib }}              # [osx]
   run:
