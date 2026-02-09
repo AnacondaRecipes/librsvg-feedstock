@@ -16,7 +16,7 @@ source:
 
 build:
   skip: true # [win and vc<14]
-  number: 2
+  number: 3
   run_exports:
     # Looks good but no new info after 2.43 so keeping it x.x for safety.
     # https://abi-laboratory.pro/?view=timeline&l=librsvg
@@ -32,6 +32,9 @@ build:
 
 requirements:
   build:
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
+    - {{ compiler('rust') }}
     - cmake       # [win]
     - make        # [unix]
     - pkg-config
@@ -39,8 +42,6 @@ requirements:
     - gi-docgen
     - binutils    # [linux]
     - gobject-introspection
-    - {{ compiler('rust') }}
-    - {{ compiler('c') }}
     - autoconf    # [unix]
     - automake    # [unix]
     - sed         # [unix]
@@ -67,7 +68,7 @@ requirements:
     - libzip 1.8.0
     - pango {{ pango }}
     # lib/libz.1.dylib required by bin/rsvg-convert on osx
-    - zlib {{ zlib }}              # [osx]
+    - libzlib {{ libzlib }}        # [osx]
   run:
     - harfbuzz    # [not win]
     - fontconfig  # [not win]
