@@ -17,9 +17,6 @@ if not exist "%LIBRARY_LIB%\xml2.lib" (
   if exist "%LIBRARY_LIB%\libxml2-2.lib" copy /Y "%LIBRARY_LIB%\libxml2-2.lib" "%LIBRARY_LIB%\xml2.lib"
 )
 
-:: Debug if still missing
-dir "%LIBRARY_LIB%\xml2.lib"
-
 mkdir forgebuild
 cd forgebuild
 

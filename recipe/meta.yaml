@@ -64,8 +64,27 @@ requirements:
 test:
   requires:
     - pkg-config
+    - cairo          # [unix]
+    - gdk-pixbuf     # [unix]
   commands:
-    - rsvg-convert --version
+    # --- UNIX / macOS shell commands ---
+    - pkg-config --modversion librsvg-2.0                     # [unix]
+    - rsvg-convert --version                                  # [unix]
+    # create a tiny SVG and render to PNG (unix)
+    - echo '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="100%" height="100%" fill="red"/></svg>' > svg-check.svg       # [unix]
+    - rsvg-convert svg-check.svg -o out.png                   # [unix]
+    - test -f out.png                                         # [unix]
+    # check that gdk-pixbuf loader for svg is registered (if gdk-pixbuf installed)
+    - gdk-pixbuf-query-loaders --update-cache || true         # [unix]
+    - gdk-pixbuf-query-loaders --list | grep -i svg || true   # [unix]
+
+    # --- Windows ---
+    - rsvg-convert.exe --version                              # [win]
+    # create svg and render (windows)
+    - cmd.exe /c "echo ^<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'^>^<rect width='100%' height='100%' fill='blue'/^>^</svg^> > svg-check.svg"   # [win]
+    - cmd.exe /c "rsvg-convert.exe svg-check.svg -o out.png"  # [win]
+    - cmd.exe /c "if not exist out.png exit 1"                # [win]
+    - cmd.exe /c "pkg-config --modversion librsvg-2.0 || echo pkg-config not available"   # [win]
 
     {% set name_abi = name + "-" + abi_version %}
     {% set lib = name + "-" + abi_version.split('.', 1)[0] %}  # [unix]
