@@ -11,6 +11,8 @@ meson_config_args=(
     -Dpixbuf=enabled
     -Dpixbuf-loader=enabled
     -Dintrospection=enabled
+    -Ddocs=disabled
+    -Dtests=false
 )
 
 export PKG_CONFIG_PATH_FOR_BUILD=$BUILD_PREFIX/lib/pkgconfig

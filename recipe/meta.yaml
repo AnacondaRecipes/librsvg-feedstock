@@ -34,8 +34,6 @@ requirements:
     - {{ stdlib('c') }}
     - {{ compiler('c') }}
     - {{ compiler('rust') }}
-    - docutils
-    - gi-docgen
     - gobject-introspection
     - meson
     - ninja-base
