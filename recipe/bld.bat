@@ -1,71 +1,65 @@
 setlocal EnableDelayedExpansion
 @echo on
 
-:: take care we don't use an accidential released rust config
-:: and later fall over it ...
-del /q %BUILD_PREFIX%\.cargo.win\config
-set MKDIR_P="mkdir"
-
-cd "win32"
-
-set PATH=%BUILD_PREFIX%\bin;%PATH%
+FOR /F "delims=" %%i IN ('cygpath.exe -m "%LIBRARY_PREFIX%"') DO set "LIBRARY_PREFIX_M=%%i"
 
 :: set pkg-config path so that host deps can be found
-set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig;%LIBRARY_PREFIX%\share\pkgconfig;%BUILD_PREFIX%\Library\lib\pkgconfig"
+set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig;%LIBRARY_PREFIX%\share\pkgconfig"
 
 :: set XDG_DATA_DIRS to find gir files
-set "XDG_DATA_DIRS=%XDG_DATA_DIRS%;%LIBRARY_PREFIX%\share"
+set "XDG_DATA_DIRS=%LIBRARY_PREFIX%\share"
 
-:: add include dirs to search path
-set "INCLUDE=%INCLUDE%;%LIBRARY_INC%\cairo;%LIBRARY_INC%\gdk-pixbuf-2.0"
+:: :: add include dirs to search path
+:: set "INCLUDE=%INCLUDE%;%LIBRARY_INC%\cairo;%LIBRARY_INC%\gdk-pixbuf-2.0"
+::
+:: :: build options
+:: :: (override rustup command so that the conda-forge rust installation is used)
+:: :: (add libiconv for linking against because glib needs its symbols)
+:: :: (abuse LIBINTL_LIB to add libs that are needed for linking RSVG tools)
+:: :: (override BINDIR to ensure the gobject-introspection tools are found)
+:: set ^"LIBRSVG_OPTIONS=^
+::   CFG=release ^
+::   PREFIX="%LIBRARY_PREFIX%" ^
+::   BINDIR="%BUILD_PREFIX%\Library\bin" ^
+::   INTROSPECTION=1 ^
+::   RUSTUP=echo ^
+::   PYTHON="%BUILD_PREFIX%\python.exe" ^
+::   TOOLCHAIN_TYPE=stable ^
+::   LIBINTL_LIB="intl.lib iconv.lib advapi32.lib bcrypt.lib ws2_32.lib userenv.lib ntdll.lib" ^
+::   CARGO_CMD="cargo --locked build --release $(MANIFEST_PATH_FLAG) $(CARGO_TARGET_DIR_FLAG)" ^
+::  ^"
 
-findstr /m "C:/ci_310/glib_1642686432177/_h_env/Library/lib/z.lib" "%LIBRARY_LIB%\pkgconfig\gio-2.0.pc"
- if %errorlevel%==0 (
-    :: our current glib gio-2.0.pc has zlib dependency set as an absolute path. 
-    powershell -Command "(gc %LIBRARY_LIB%\pkgconfig\gio-2.0.pc) -replace 'Requires:', 'Requires: zlib,' | Out-File -encoding ASCII %LIBRARY_LIB%\pkgconfig\gio-2.0.pc"
-    powershell -Command "(gc %LIBRARY_LIB%\pkgconfig\gio-2.0.pc) -replace 'C:/ci_310/glib_1642686432177/_h_env/Library/lib/z.lib', '' | Out-File -encoding ASCII %LIBRARY_LIB%\pkgconfig\gio-2.0.pc"
-)
+mkdir forgebuild
+cd forgebuild
 
-IF NOT EXIST "%LIBRARY_PREFIX%\lib\png16.lib" (
-  :: the build looks for png16.lib
-  copy "%LIBRARY_PREFIX%"\lib\libpng16.lib "%LIBRARY_PREFIX%\lib\png16.lib"
-)
-
-:: build options
-:: (override rustup command so that the conda-forge rust installation is used)
-:: (add libiconv for linking against because glib needs its symbols)
-:: (abuse LIBINTL_LIB to add libs that are needed for linking RSVG tools)
-:: (override BINDIR to ensure the gobject-introspection tools are found)
-:: (introspection disabled: enable by setting INTROSPECTION=1 )
-set ^"LIBRSVG_OPTIONS=^
-  CFG=release ^
-  PREFIX="%LIBRARY_PREFIX%" ^
-  BINDIR="%BUILD_PREFIX%\Library\bin" ^
-  LIBDIR="%LIBRARY_PREFIX%\lib" ^
-  INTROSPECTION=1 ^
-  RUSTUP=echo ^
-  PYTHON="%BUILD_PREFIX%\python.exe" ^
-  TOOLCHAIN_TYPE=stable ^
-  LIBINTL_LIB="intl.lib iconv.lib advapi32.lib bcrypt.lib ws2_32.lib userenv.lib ntdll.lib" ^
-  CARGO_CMD="cargo --locked build --release $(MANIFEST_PATH_FLAG) $(CARGO_TARGET_DIR_FLAG)" ^
- ^"
-
-set Python3_EXECUTABLE=%BUILD_PREFIX%\python
-set Python3_ROOT_DIR="%BUILD_PREFIX%\Library"
-
-:: configure files
-:: (use cmake just because it's convenient for replacing @VAR@ in files
-cmake -DPACKAGE_VERSION=%PKG_VERSION% -P "%RECIPE_DIR%\win_configure_files.cmake"
+meson setup ^
+  --buildtype=release ^
+  --prefix=%LIBRARY_PREFIX% ^
+  --backend=ninja ^
+  -Dintrospection=enabled ^
+  -Dpixbuf=enabled ^
+  -Dpixbuf-loader=enabled ^
+  -Dcfextragirdir=%LIBRARY_PREFIX%\share\gir-1.0 ^
+  ..
 if errorlevel 1 exit 1
 
-nmake /F Makefile.vc !LIBRSVG_OPTIONS!
+ninja
 if errorlevel 1 exit 1
 
-nmake /F Makefile.vc install !LIBRSVG_OPTIONS!
+ninja install
 if errorlevel 1 exit 1
 
-:: don't include debug symbols
-del %LIBRARY_BIN%\rsvg-*.pdb
+:: Copy libraries to be named consistently with the Autotools builds.
+:: This way people can migrate to the new names, but we don't break
+:: packages that still depend on the old ones.
+copy %LIBRARY_BIN%\rsvg-2-2.dll %LIBRARY_BIN%\rsvg-2.0-vs%VS_MAJOR%.dll
 if errorlevel 1 exit 1
-del %LIBRARY_LIB%\gdk-pixbuf-2.0\2.10.0\loaders\libpixbufloader-svg.pdb
+copy %LIBRARY_LIB%\rsvg-2.lib %LIBRARY_LIB%\rsvg-2.0.lib
 if errorlevel 1 exit 1
+
+:: This may not be necessary? Haven't checked what gdk-pixbuf looks
+:: for on Windows.
+move %LIBRARY_LIB%\gdk-pixbuf-2.0\2.10.0\loaders\pixbufloader_svg.dll %LIBRARY_LIB%\gdk-pixbuf-2.0\2.10.0\loaders\libpixbufloader_svg.dll
+if errorlevel 1 exit 1
+
+rmdir /s /q %LIBRARY_PREFIX%\share\doc
