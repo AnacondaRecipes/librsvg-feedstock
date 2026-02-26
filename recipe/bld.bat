@@ -1,13 +1,24 @@
 setlocal EnableDelayedExpansion
 @echo on
 
-FOR /F "delims=" %%i IN ('cygpath.exe -m "%LIBRARY_PREFIX%"') DO set "LIBRARY_PREFIX_M=%%i"
-
 :: set pkg-config path so that host deps can be found
 set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig;%LIBRARY_PREFIX%\share\pkgconfig"
 
 :: set XDG_DATA_DIRS to find gir files
 set "XDG_DATA_DIRS=%LIBRARY_PREFIX%\share"
+
+:: Make sure MSVC can find libs/includes
+set "LIB=%LIBRARY_LIB%;%LIB%"
+set "INCLUDE=%LIBRARY_INC%;%INCLUDE%"
+
+:: Work around libxml2 import library naming differences
+if not exist "%LIBRARY_LIB%\xml2.lib" (
+  if exist "%LIBRARY_LIB%\libxml2.lib" copy /Y "%LIBRARY_LIB%\libxml2.lib" "%LIBRARY_LIB%\xml2.lib"
+  if exist "%LIBRARY_LIB%\libxml2-2.lib" copy /Y "%LIBRARY_LIB%\libxml2-2.lib" "%LIBRARY_LIB%\xml2.lib"
+)
+
+:: Debug if still missing
+dir "%LIBRARY_LIB%\xml2.lib"
 
 mkdir forgebuild
 cd forgebuild
