@@ -1,9 +1,6 @@
 #!/bin/bash
 set -exuo pipefail
 
-# $BUILD_PREFIX needed here so gi-docgen can find .gir files:
-export XDG_DATA_DIRS="${XDG_DATA_DIRS:+$XDG_DATA_DIRS:}$PREFIX/share:$BUILD_PREFIX/share"
-
 # https://github.com/rust-lang/cargo/issues/10583#issuecomment-1129997984
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 
@@ -23,7 +20,6 @@ meson setup builddir \
   ${MESON_ARGS:-} \
   "${meson_config_args[@]}" \
   --prefix="$PREFIX" \
-  -Dtests=false \
   -Dtriplet="${CARGO_BUILD_TARGET:-}" \
   -Dlocalstatedir="$PREFIX/var" \
   || { cat builddir/meson-logs/meson-log.txt 2>/dev/null || true; exit 1 ; }

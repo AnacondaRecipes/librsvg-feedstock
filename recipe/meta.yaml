@@ -22,12 +22,6 @@ build:
     - {{ pin_subpackage('librsvg', max_pin='x') }}
   ignore_run_exports_from:
     - expat
-    - freetype
-    - libpng
-    - zlib
-  ignore_run_exports:
-    - fontconfig
-    - harfbuzz
 
 requirements:
   build:
@@ -52,20 +46,25 @@ requirements:
     - libpng {{ libpng }}          # [unix]
     - freetype {{ freetype }}      # [unix]
     - fontconfig {{ fontconfig }}  # [unix]
+    - gobject-introspection 1.*
+    - libintl   # [osx]
   run:
-    - harfbuzz    # [unix]
-    - fontconfig  # [unix]
-    - libpng      # [osx]
-    - freetype    # [osx]
-    - libiconv    # [osx]
-    - libintl     # [osx]
-    - libzlib     # [osx]
+    - cairo
+    - freetype
+    - libglib
+    - harfbuzz
+    - libxml2
+    - pango
+    - gdk-pixbuf
+    - fontconfig
+    - libzlib
+    - libpng
+    - libiconv  # [osx]
+    - libintl   # [osx]
 
 test:
   requires:
     - pkg-config
-    - cairo          # [unix]
-    - gdk-pixbuf     # [unix]
   commands:
     # --- UNIX / macOS shell commands ---
     - pkg-config --modversion librsvg-2.0                     # [unix]
@@ -135,6 +134,7 @@ about:
     both static and animated SVG content.
   license: LGPL-2.1-or-later
   license_file: COPYING.LIB
+  license_family: LGPL
 
 extra:
   recipe-maintainers:
