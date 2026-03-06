@@ -38,13 +38,13 @@ requirements:
     - gdk-pixbuf {{ gdk_pixbuf }}
     - pango {{ pango }}
     - zlib {{ zlib }}
-    - libiconv {{ libiconv }}      # [osx]
-    - harfbuzz {{ harfbuzz }}      # [unix]
-    - libpng {{ libpng }}          # [unix]
-    - freetype {{ freetype }}      # [unix]
-    - fontconfig {{ fontconfig }}  # [unix]
+    - libiconv {{ libiconv }}       # [osx]
+    - harfbuzz {{ harfbuzz }}
+    - libpng {{ libpng }}
+    - freetype {{ freetype }}
+    - fontconfig {{ fontconfig }}   # [linux]
     - gobject-introspection 1.*
-    - libintl   # [osx]
+    - libintl                       # [osx]
   run:
     - cairo
     - freetype
@@ -53,11 +53,11 @@ requirements:
     - libxml2
     - pango
     - gdk-pixbuf
-    - fontconfig
+    - fontconfig        # [linux]
     - libzlib
     - libpng
-    - libiconv  # [osx]
-    - libintl   # [osx]
+    - libiconv          # [osx]
+    - libintl           # [osx]
 
 test:
   requires:
