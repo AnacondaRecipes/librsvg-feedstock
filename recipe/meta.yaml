@@ -28,6 +28,7 @@ requirements:
     - {{ compiler('rust') }}
     - gobject-introspection
     - meson
+    - cmake                       # [win] # for FreeType fallback
     - ninja-base
     - pkg-config
     - cargo-c
@@ -40,10 +41,10 @@ requirements:
     - zlib {{ zlib }}
     - libiconv {{ libiconv }}       # [osx]
     - harfbuzz {{ harfbuzz }}
-    - libpng {{ libpng }}
+    - libpng {{ libpng }}    # required by rsvg-convert
     - freetype {{ freetype }}
-    - fontconfig {{ fontconfig }}   # [linux]
-    - gobject-introspection 1.*
+    - fontconfig {{ fontconfig }}
+    - gobject-introspection
     - libintl                       # [osx]
   run:
     - cairo
@@ -53,9 +54,9 @@ requirements:
     - libxml2
     - pango
     - gdk-pixbuf
-    - fontconfig        # [linux]
+    - fontconfig
     - libzlib
-    - libpng
+    - libpng    # required by rsvg-convert
     - libiconv          # [osx]
     - libintl           # [osx]
 
