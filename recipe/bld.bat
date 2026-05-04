@@ -30,6 +30,7 @@ meson setup ^
   -Dcfextragirdir=%LIBRARY_PREFIX%\share\gir-1.0 ^
   -Ddocs=disabled ^
   -Dtests=false ^
+  -Dc_link_args="/FORCE:MULTIPLE" ^
   ..
 if errorlevel 1 exit 1
 
